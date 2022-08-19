@@ -2,8 +2,10 @@ import json
 import os
 import string
 
+from helpers.singleton_meta import SingletonMeta
 
-class Config:
+
+class Config(metaclass=SingletonMeta):
     _instance = None
     config = {}
 
@@ -22,6 +24,8 @@ class Config:
         except FileNotFoundError:
             print('Error: Unable to parse config file.')
 
-    @staticmethod
-    def get(key: string):
-        return Config().config.get(key)
+    def get(self, key: string):
+        return self.config.get(key)
+
+    def get_option(self, key: string):
+        return self.get('options').get(key)

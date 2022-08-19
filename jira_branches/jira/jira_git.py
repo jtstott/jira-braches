@@ -1,16 +1,17 @@
-import git
-from client import Client
-from config import Config
-from serializers import deserialize_ticket, TicketInfo
+from commands import git
+from jira.client import Client
+from config.config import Config
+from jira.serializers import deserialize_ticket, TicketInfo
 
 
 class JiraGitService:
 
     def __init__(self, client: Client):
         self.client = client
+        self.config = Config()
 
     def checkout_ticket_branch(self, ticket_id):
-        prefix = Config.get('prefix') or ''
+        prefix = self.config.get_option('id_prefix') or ''
         ticket_id = f"{prefix}{ticket_id.replace(prefix, '')}"
         try:
             response = self.client.get_ticket_summary(ticket_id)

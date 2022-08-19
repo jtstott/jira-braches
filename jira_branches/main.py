@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import argparse
 import sys
-import command_handler
+from commands import command_handler
 
 
 def main(command, argv):

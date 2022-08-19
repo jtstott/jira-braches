@@ -1,9 +1,9 @@
 import sys
 
-from auth import get_credentials
-from client import Client
-from config import Config
-from jira_git import JiraGitService
+from config.auth import get_credentials
+from jira.client import Client
+from config.config import Config
+from jira.jira_git import JiraGitService
 
 
 def checkout_branch(opts, args):
@@ -13,7 +13,7 @@ def checkout_branch(opts, args):
         print("Argument 0 missing. Please specify a ticket ID to create the branch from.")
         sys.exit()
 
-    client = Client(Config.get('baseUrl')).authenticate(get_credentials(opts))
+    client = Client(Config().get('baseUrl')).authenticate(get_credentials(opts))
     JiraGitService(client).checkout_ticket_branch(ticket_id)
 
 
