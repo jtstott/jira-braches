@@ -21,14 +21,17 @@ For example: `feature/PROJECT-1078-some-jira-ticket-title`
   },
   // Jira instance base URL
   "baseUrl": "",
-  // Jira ticket ID prefix
-  "id_prefix": ""
+  "options": {
+    // Jira ticket ID prefix
+    "id_prefix": ""
+  }
 }
 ```
 
 ## Configuration
 
 ### ID Prefix
+
 The `id_prefix` can be used if all Jira ticket IDs start with the same prefix, meaning the prefix can be omitted when
 the tool is executed.
 

@@ -6,6 +6,7 @@ from commands import command_handler
 
 def main(command, argv):
     opts, all_args = parseargs()
+    print(sys.version)
     command_handler.commands[command](opts, argv)
 
 

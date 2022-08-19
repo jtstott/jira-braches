@@ -63,13 +63,11 @@ class BranchNameFormatter:
     def map_type(self):
         ticket_type = self.ticket_info.type
 
-        match ticket_type:
-            case 'Story':
-                return 'feature'
-            case 'Bug':
-                return 'bugfix'
-            case _:
-                return 'task'
+        if ticket_type == 'Story':
+            return 'feature'
+        if ticket_type == 'Bug':
+            return 'bugfix'
+        return 'task'
 
     def format_summary(self):
         self.replace_chars()
