@@ -1,0 +1,2 @@
+[scripts]
+build = " pyinstaller jira_branches/main.py -F --additional-hooks-dir=hooks --distpath=bin -n jira-branches"
