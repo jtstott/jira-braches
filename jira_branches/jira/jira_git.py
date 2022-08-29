@@ -11,7 +11,7 @@ class JiraGitService:
         self.config = Config()
 
     def checkout_ticket_branch(self, ticket_id):
-        prefix = self.config.get_option('id_prefix') or ''
+        prefix = self.config.get_option('idPrefix') or ''
         ticket_id = f"{prefix}{ticket_id.replace(prefix, '')}"
         try:
             response = self.client.get_ticket_summary(ticket_id)
@@ -25,9 +25,9 @@ class JiraGitService:
 
 
 class BranchNameFormatter:
-
     char_replacements = {
         ' ': '-',
+        '--': '-',
         '---': '-',
         '&': 'and',
         '>': 'gt',
@@ -56,22 +56,31 @@ class BranchNameFormatter:
     def __init__(self, ticket_info: TicketInfo):
         self.ticket_info = ticket_info
         self.summary = self.ticket_info.summary.strip()
+        self.config = Config()
 
     def __str__(self):
-        return f"{self.map_type()}/{self.ticket_info.key}-{self.format_summary()}"
+        return self.format_branch_name()
+
+    def format_branch_name(self):
+        branch_name = self.config.get('branchTemplate')
+        valid_options = {
+            'id': self.ticket_info.key,
+            'type': self.map_type(),
+            'summary': self.format_summary()
+        }
+
+        for option, value in valid_options.items():
+            branch_name = branch_name.replace(f"[{option}]", value)
+
+        return branch_name
 
     def map_type(self):
         ticket_type = self.ticket_info.type
-
-        if ticket_type == 'Story':
-            return 'feature'
-        if ticket_type == 'Bug':
-            return 'bugfix'
-        return 'task'
+        return self.map_configured_types(ticket_type)
 
     def format_summary(self):
-        self.replace_chars()
         self.strip_forbidden_chars()
+        self.replace_chars()
 
         return self.summary.lower()
 
@@ -82,3 +91,14 @@ class BranchNameFormatter:
     def strip_forbidden_chars(self):
         for forbidden in self.char_forbidden:
             self.summary = self.summary.replace(forbidden, '')
+
+    def map_configured_types(self, ticket_type):
+        type_map = self.config.get_option('mapTypes')
+        if type_map:
+            if ticket_type in type_map:
+                return type_map[ticket_type]
+
+            if '*' in type_map:
+                return type_map['*']
+
+        return ticket_type
