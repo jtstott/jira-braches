@@ -2,6 +2,7 @@
 .idea/
 
 jira-branches.spec
+jira_branches/jira/__pycache__/
 
 dist/
 build/
