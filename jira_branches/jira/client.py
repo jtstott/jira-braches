@@ -1,6 +1,6 @@
 import requests
 from config.auth import Credentials
-from jira.request import JiraRequest
+from jira.api.jira_request import JiraRequest
 
 
 class Client:
