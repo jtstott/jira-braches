@@ -1,11 +1,6 @@
 from requests import Response
 
-
-class TicketInfo:
-    def __init__(self, ticket_key, ticket_summary, ticket_type):
-        self.key = ticket_key
-        self.summary = ticket_summary
-        self.type = ticket_type
+from jira.ticket.ticket_info import TicketInfo
 
 
 def deserialize_ticket(response: Response) -> TicketInfo:
@@ -17,7 +12,7 @@ def deserialize_ticket(response: Response) -> TicketInfo:
         return TicketInfo(ticket_key, ticket_summary, ticket_type)
 
     if response.status_code == 401 or response.status_code == 403:
-        raise Exception('Unable to authenticate request to Jira. Check credentials')
+        raise Exception('Unable to authenticate api to Jira. Check credentials')
 
     raise Exception(
         f"Unable to retrieve ticket details from Jira. HTTP status {response.status_code} - {response.json()['errorMessages']}")
